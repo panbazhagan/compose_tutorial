@@ -6,17 +6,19 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import app.tutorial.compose.ui.theme.ComposeTutorialTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,35 +30,33 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
+data class ExampleUiState(
+    val dataToDisplayOnScreen: List<String> = emptyList(),
+    val userMessages: List<String> = listOf("Hello"),
+    val loading: Boolean = false
+)
 
-@Composable
-fun RowExample() {
-    Row {
-        Text("1")
-        Text("2")
+class ExampleViewModel() : ViewModel() {
+
+    var uiState by mutableStateOf(ExampleUiState())
+        private set
+
+    // Business logic
+    fun somethingRelatedToBusinessLogic() { /* ... */
     }
 }
 
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun ReCompositionExample(clicked: Int, onClicked: () -> Unit) {
+fun ReCompositionExample(viewModel: ExampleViewModel = viewModel()) {
     Column {
-        Button(
-            onClick = { onClicked.invoke() },
-        ) {
-            Text(text = clicked.toString())
-        }
+        Text(text = viewModel.uiState.userMessages.first())
     }
 }
 
@@ -66,11 +66,6 @@ fun ReCompositionExample(clicked: Int, onClicked: () -> Unit) {
 fun DefaultPreview() {
     ComposeTutorialTheme {
         Log.d("compose", "This compose block is running")
-        val state = remember {
-            mutableStateOf(5)
-        }
-        ReCompositionExample(state.value, onClicked = {
-            state.value = state.value + 1
-        })
+        ReCompositionExample()
     }
 }

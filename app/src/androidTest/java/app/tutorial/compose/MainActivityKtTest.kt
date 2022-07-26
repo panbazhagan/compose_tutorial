@@ -14,7 +14,7 @@ class MainActivityKtTest {
     @Test
     fun shouldDisplayPreviewView() {
         composeTestRule.setContent {
-            ReCompositionExample(1) {}
+            ReCompositionExample()
         }
         composeTestRule.onNodeWithText("1").assertIsDisplayed()
     }
