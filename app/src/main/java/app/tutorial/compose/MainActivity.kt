@@ -3,8 +3,6 @@ package app.tutorial.compose
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -12,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.compose.ConstraintLayout
 import app.tutorial.compose.ui.theme.ComposeTutorialTheme
 
 class MainActivity : ComponentActivity() {
@@ -36,25 +35,26 @@ fun Greeting(name: String) {
 }
 
 @Composable
-fun RowExample() {
-    Row {
-        Text("1")
-        Text("2")
+fun ComposeExample() {
+    ConstraintLayout {
+        val (t1, t2) = createRefs()
+
+        Text("1", modifier = Modifier.constrainAs(t1) {
+            top.linkTo(parent.top)
+        })
+        Text("2", modifier = Modifier.constrainAs(t2) {
+            top.linkTo(t1.bottom)
+            start.linkTo(t1.end)
+        })
     }
+
 }
 
-@Composable
-fun ColumnExample() {
-    Column {
-        Text("1")
-        Text("2")
-    }
-}
 
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     ComposeTutorialTheme {
-        RowExample()
+        ComposeExample()
     }
 }
