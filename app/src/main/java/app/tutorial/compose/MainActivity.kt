@@ -2,6 +2,7 @@ package app.tutorial.compose
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
@@ -13,6 +14,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import app.tutorial.compose.ui.theme.ComposeTutorialTheme
@@ -46,6 +48,7 @@ fun RowExample() {
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Composable
 fun ReCompositionExample(clicked: Int, onClicked: () -> Unit) {
     Column {
@@ -61,8 +64,11 @@ fun ReCompositionExample(clicked: Int, onClicked: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    val state = mutableStateOf(1)
     ComposeTutorialTheme {
+        Log.d("compose", "This compose block is running")
+        val state = remember {
+            mutableStateOf(5)
+        }
         ReCompositionExample(state.value, onClicked = {
             state.value = state.value + 1
         })
